@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { FC } from 'react';
+import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+
 import './App.css';
 
-function App() {
+// COMPONENTS IMPORTS
+import Home from "./components/home";
+import Navigation from './components/navigation';
+
+import Signin from './components/signin';
+import Login from './components/login';
+
+import Passwords from './components/passwords/passwords';
+import CreatePassword from './components/passwords/createPassword';
+import PasswordDisplay from './components/passwords/passwordDisplay';
+
+// CONTEXT IMPORTS
+import { appContext, appState } from "./AppState/appstate";
+
+const App:FC = () => {
+
   return (
+    <appContext.Provider value={appState}>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Navigation/>
+        <Routes>
+          <Route path="/" element={<Home/>} />
+          <Route path="login" element={<Login/>} />
+          <Route path="signin" element={<Signin/>} />
+          <Route path="passwords" element={<Passwords/>}>
+            <Route path='createpassword' element={<CreatePassword /> } /> 
+            <Route path='passwordDisplay' element={<PasswordDisplay />} /> 
+          </Route>
+        </Routes>
+      </Router>    
     </div>
-  );
+    </appContext.Provider>
+      );
 }
 
 export default App;
