@@ -1,5 +1,7 @@
+import { Box, TextInput, Button, Container } from '@mantine/core'
 import axios from 'axios'
 import React, { useState, FormEvent, FC } from 'react'
+
 
 
 
@@ -11,6 +13,7 @@ const Login:FC = () => {
   // password
   const [username, setUsername] = useState<string | null>("")
   const [password, setPassword] = useState<string | null>("")
+  const [errormsg, seterrormsg] = useState<string | null>("")
 
   // INTERFACES
   interface userProfile {
@@ -28,6 +31,10 @@ const Login:FC = () => {
       password: password 
     }
 
+    if(username == null){
+      alert("oops")
+    }
+
     console.log(userProfile)
 
     // sending userprofile to database
@@ -43,21 +50,26 @@ const Login:FC = () => {
 
   return (
     <>
-    <div>
-      <form onSubmit={(e) => {handlesubmit(e)}} >
+   
+    <Container size="xs" ml='10rem' px='10rem'>
+         <form onSubmit={(e) => {handlesubmit(e)}} >
 
         {/* username */}
-        <label htmlFor="username" >Username</label>
-        <input type="text" onChange={(e) => {setUsername(e.target.value)}} />
+        <TextInput py={100} size="sm" type='text' placeholder="your username"  required label="username" error={errormsg} onChange={(e) => {setUsername(e.target.value)}} />
+       
 
         {/* password */}
-        <label htmlFor="password">Password</label>
-        <input type="password" onChange={(e) => {setPassword(e.target.value)}} />
+        <TextInput  required label="password" type='password'  onChange={(e) => {setPassword(e.target.value)}}/>
+       
 
         {/* login */}
-        <button type='submit' >Login</button>
+        <Button type='submit' my="1rem" >Login</Button>
       </form>
-    </div>
+
+
+    </Container>
+     
+   
 
     </>
   )

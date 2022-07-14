@@ -1,14 +1,37 @@
 import React, {FC} from 'react'
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 
 
-const Passwords = () => {
+// IMPORT MAIN APP STATE
+import { useMainApp } from "../../AppState/appstate";
+
+
+const Passwords:FC = () => {
+
+  // INITIALIZATIONS
+  // main app state
+  const { mainappstate, setmainappstate } = useMainApp()
+ 
+  
+  
+
+  
+ 
+
   return (
     <div>
 
-      <button type='button' >Create password</button>
-      <button type='button' >Show saved passwords</button>
-      <Outlet />
+
+      <button type='button' > 
+      <Link to='createpassword' >Create Password</Link>
+      </button>
+     
+      <button type='button' > 
+      <Link to='passwordDisplay' >Diplay passwords</Link>
+      </button>
+     
+      
+      <Outlet context={mainappstate} />
     </div>
   )
 }

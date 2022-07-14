@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import { AppShell, Navbar, Header } from "@mantine/core";
 
 import './App.css';
 
@@ -15,15 +16,31 @@ import CreatePassword from './components/passwords/createPassword';
 import PasswordDisplay from './components/passwords/passwordDisplay';
 
 // CONTEXT IMPORTS
-import { appContext, appState } from "./AppState/appstate";
+import { ContextProvider } from "./AppState/appstate";
+
+
 
 const App:FC = () => {
 
+  // MAIN APP STATE
+
+
   return (
-    <appContext.Provider value={appState}>
+
+    <Router>
+    <AppShell
+    padding="md"
+    navbar={ <Navigation />}
+    header={<Header height={60} p="xs">{/* Header content */}</Header>}
+    styles={(theme) => ({
+      main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
+    })}
+  >
+ 
+  
+    <ContextProvider>
     <div className="App">
-      <Router>
-        <Navigation/>
+    
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="login" element={<Login/>} />
@@ -33,9 +50,13 @@ const App:FC = () => {
             <Route path='passwordDisplay' element={<PasswordDisplay />} /> 
           </Route>
         </Routes>
-      </Router>    
+       
     </div>
-    </appContext.Provider>
+    </ContextProvider>
+    
+
+    </AppShell>
+    </Router>  
       );
 }
 

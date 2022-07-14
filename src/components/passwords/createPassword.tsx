@@ -1,12 +1,12 @@
 import axios from 'axios'
-import React, { useState, FormEvent, FC, useContext, } from 'react'
+import React, { useState, FormEvent, FC } from 'react'
+import { useOutletContext } from 'react-router-dom';
 
 // INTERFACE IMPORTS
-import { passwordINF } from "../../interfaces/passwordINF";
+import { appStateTYPE } from '../../AppState/appstate';
+import {createPasswordINF} from "../../interfaces/createPasswordINF";
 
-// MAIN STATE IMPORTS
-import { appContext } from "../../AppState/appstate";
-
+export type valueProps = string | null;
 
 
 
@@ -15,29 +15,42 @@ const CreatePassword:FC = () => {
   // username
   // password
   // main app state
-  const [title, setTitle] = useState<string | null>("");
-  const [password, setPassword] = useState<string | null>("");
-  const mainState = useContext(appContext);
+  const [title, setTitle] = useState<string>("");
+  const [password, setpassword] = useState<string>("");
+  const {username, userpassword, pincode} = useOutletContext<appStateTYPE>();
 
- console.log(mainState);
- 
+  // FORM CLEANER
+  const formcleaner = () => {
+    setTitle('')
+    setpassword('')
+  };
+
+  console.log(typeof "")
+
 
   // FORM SUBMIT HANDLER
   const handlesubmit = (e:FormEvent<HTMLFormElement>):void => {
     e.preventDefault();
+
+    formcleaner()
+
     
-    // create userprofile object
-    const passwordData:passwordINF = {
-      title: title,
-      password: password 
+    // create passwordData object
+    const passwordData:createPasswordINF = {
+      username,
+      userpassword,
+      pincode,
+      title,
+      password
     }
 
     console.log(passwordData)
 
-    // sending userprofile to database
-    axios.post('http://localhost:3001/user/login',
-    JSON.stringify((passwordData))).then((res) => {
+    // sending passwordData to database
+    axios.post(`http://localhost:3001/user/Passwords`,
+    passwordData).then((res) => {
       console.log(res)
+     
       return res
     }).then((result) => {
       console.log(result)
@@ -51,11 +64,11 @@ const CreatePassword:FC = () => {
 
         {/* title */}
         <label htmlFor="title" >Title</label>
-        <input type="text" onChange={(e) => {setTitle(e.target.value)}} />
+        <input type="text" value={title} onChange={(e) => {setTitle(e.target.value)}} />
 
         {/* password */}
         <label htmlFor="password">Password</label>
-        <input type="password" onChange={(e) => {setPassword(e.target.value)}} />
+        <input type="password" value={password} onChange={(e) => {setpassword(e.target.value)}} />
 
         {/* submit */}
         <button type='submit' >Sumbit</button>

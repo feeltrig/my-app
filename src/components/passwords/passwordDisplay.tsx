@@ -1,10 +1,28 @@
 import React, {FC} from 'react'
+import { useOutletContext } from 'react-router-dom';
 
+// IMPORT INTERFACES
+import { appStateINF } from "../../interfaces/appStateINF";
 
 
 const PasswordDisplay:FC = () => {
+
+  // INITIALIZATIONS
+  // main app state
+  const mainState:appStateINF = useOutletContext();
+
+
+  console.log(mainState.passwordData)
+
   return (
-    <div>PasswordDisplay</div>
+    <div className='passwordContainer' > 
+      {mainState.passwordData.map((item) => {
+        return(<>
+        <p>{item.title}</p>
+        <p>{item.password}</p>
+        </>)
+      })}
+    </div>
   )
 }
 
