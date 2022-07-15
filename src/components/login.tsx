@@ -1,6 +1,7 @@
-import { Box, TextInput, Button, Container } from '@mantine/core'
+import {  TextInput, Button, Container } from '@mantine/core'
 import axios from 'axios'
-import React, { useState, FormEvent, FC } from 'react'
+import React, { useState, FormEvent, FC, useCallback } from 'react'
+import { useMainApp } from '../AppState/appstate'
 
 
 
@@ -11,15 +12,41 @@ const Login:FC = () => {
   // INTIALIZATIONS
   // username
   // password
-  const [username, setUsername] = useState<string | null>("")
-  const [password, setPassword] = useState<string | null>("")
-  const [errormsg, seterrormsg] = useState<string | null>("")
+  // main app state
+  const [username, setUsername] = useState<string>("")
+  const [userpassword, setuserpassword] = useState<string>("")
+  const [errormsg, seterrormsg] = useState<string>("")
+  const {setmainappstate} = useMainApp()
+
+   
+   
 
   // INTERFACES
   interface userProfile {
-    username: string | null,
-    password: string | null
+    username: string ,
+    userpassword: string 
   }
+
+   // FORM CLEANER
+   const formcleaner = () => {
+    setuserpassword('')
+    setUsername('')
+    seterrormsg('')
+  };
+
+  
+  // HANDLE FORM INPUT
+  const handleInput = (e:React.ChangeEvent<HTMLInputElement>) => {
+
+   
+    if(e.target.name === 'username'){
+      setUsername(e.target.value)
+    } else if (e.target.name === 'password'){
+      setuserpassword(e.target.value)
+    } 
+
+  };
+  
 
   // FORM SUBMIT HANDLER
   const handlesubmit = (e:FormEvent<HTMLFormElement>):void => {
@@ -27,15 +54,23 @@ const Login:FC = () => {
     
     // create userprofile object
     const userProfile:userProfile = {
-      username: username,
-      password: password 
+      username,
+      userpassword 
     }
 
-    if(username == null){
-      alert("oops")
+    // error message handler
+    if(username === null || ""){
+      seterrormsg("Please input your username")
+    } else if ( username.length > 40  ) {
+      seterrormsg("Username too long")
     }
 
-    console.log(userProfile)
+     // set main app state
+     setmainappstate((prevstate) => {
+      const newstate = {...prevstate, username, userpassword}
+      return newstate;
+    })
+
 
     // sending userprofile to database
     axios.post('http://localhost:3001/user/login',
@@ -45,21 +80,23 @@ const Login:FC = () => {
     }).then((result) => {
       console.log(result)
     })
+
+    formcleaner()
     
   }
 
   return (
     <>
    
-    <Container size="xs" ml='10rem' px='10rem'>
+    <Container fluid>
          <form onSubmit={(e) => {handlesubmit(e)}} >
 
         {/* username */}
-        <TextInput py={100} size="sm" type='text' placeholder="your username"  required label="username" error={errormsg} onChange={(e) => {setUsername(e.target.value)}} />
+        <TextInput   type='text'  placeholder="your username"  required label="username" name='username' value={username} error={errormsg} onChange={handleInput} />
        
 
         {/* password */}
-        <TextInput  required label="password" type='password'  onChange={(e) => {setPassword(e.target.value)}}/>
+        <TextInput  required label="password"  type='password' placeholder="your password" value={userpassword} name='userpassword' onChange={handleInput} />
        
 
         {/* login */}

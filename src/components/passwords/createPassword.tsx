@@ -1,3 +1,4 @@
+import { Button, Container, TextInput } from '@mantine/core';
 import axios from 'axios'
 import React, { useState, FormEvent, FC } from 'react'
 import { useOutletContext } from 'react-router-dom';
@@ -25,16 +26,21 @@ const CreatePassword:FC = () => {
     setpassword('')
   };
 
-  console.log(typeof "")
+   // HANDLE FORM INPUT
+   const handleInput = (e:React.ChangeEvent<HTMLInputElement>) => {
+   
+    if(e.target.name === 'title'){
+      setTitle(e.target.value)
+    } else if (e.target.name === 'password'){
+      setpassword(e.target.value)
+    }
 
+  };
 
   // FORM SUBMIT HANDLER
   const handlesubmit = (e:FormEvent<HTMLFormElement>):void => {
     e.preventDefault();
 
-    formcleaner()
-
-    
     // create passwordData object
     const passwordData:createPasswordINF = {
       username,
@@ -44,36 +50,37 @@ const CreatePassword:FC = () => {
       password
     }
 
-    console.log(passwordData)
 
     // sending passwordData to database
     axios.post(`http://localhost:3001/user/Passwords`,
     passwordData).then((res) => {
-      console.log(res)
-     
+      console.log(res.status)     
       return res
     }).then((result) => {
-      console.log(result)
+      console.log(result.data.message)
     })
+
+       // clear form field
+       formcleaner()
   }
 
   return (
     <>
-    <div>
+    <Container my="2rem">
       <form onSubmit={(e) => {handlesubmit(e)}} >
 
         {/* title */}
-        <label htmlFor="title" >Title</label>
-        <input type="text" value={title} onChange={(e) => {setTitle(e.target.value)}} />
+        <TextInput  required label="title" type='password' placeholder="your title"  onChange={handleInput}/>
+        
 
         {/* password */}
-        <label htmlFor="password">Password</label>
-        <input type="password" value={password} onChange={(e) => {setpassword(e.target.value)}} />
+        <TextInput  required label="password" type='password' placeholder="your password" onChange={handleInput}  />
+        
 
         {/* submit */}
-        <button type='submit' >Sumbit</button>
+        <Button type='submit' my="1rem" >Submit</Button>
       </form>
-    </div>
+    </Container>
 
     </>
   )

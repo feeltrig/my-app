@@ -6,6 +6,8 @@ todo
 7. use jwt auth
 8. fetch passwords from backend
 9. create all context to save data on client for userprofile
+10. create mantine notifications and alerts and modals with loading
+11. add responsive ness to css
 
 completed
 

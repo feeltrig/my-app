@@ -16,11 +16,11 @@ const PasswordDisplay:FC = () => {
 
   return (
     <div className='passwordContainer' > 
-      {mainState.passwordData.map((item) => {
-        return(<>
+      {mainState.passwordData.map((item,index) => {
+        return(<div key={index}>
         <p>{item.title}</p>
         <p>{item.password}</p>
-        </>)
+        </div>)
       })}
     </div>
   )

@@ -1,5 +1,7 @@
+import { Button, Container } from '@mantine/core';
 import React, {FC} from 'react'
 import { Outlet, Link } from "react-router-dom";
+
 
 
 // IMPORT MAIN APP STATE
@@ -10,29 +12,23 @@ const Passwords:FC = () => {
 
   // INITIALIZATIONS
   // main app state
-  const { mainappstate, setmainappstate } = useMainApp()
+  // button variant
+  const { mainappstate } = useMainApp()
+  const buttonvaraint = 'outline'
  
-  
-  
-
-  
- 
-
   return (
-    <div>
+    <Container fluid >
 
-
-      <button type='button' > 
-      <Link to='createpassword' >Create Password</Link>
-      </button>
+      <Button type='button' mx="0.5rem" to='createpassword' component={Link} variant={buttonvaraint} > 
+    Create Password
+      </Button>
      
-      <button type='button' > 
-      <Link to='passwordDisplay' >Diplay passwords</Link>
-      </button>
+      <Button type='button' mx="0.5rem" component={Link} to='passwordDisplay' variant={buttonvaraint} > 
+      Diplay passwords
+      </Button>
      
-      
       <Outlet context={mainappstate} />
-    </div>
+    </Container>
   )
 }
 

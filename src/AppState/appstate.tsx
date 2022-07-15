@@ -17,7 +17,7 @@ export const appState = {
   username: null,
   userpassword: null,
   pincode: null,
-  passwordData: [{ title: "example", password: "123" }],
+  passwordData: [],
   authToken: null,
 };
 

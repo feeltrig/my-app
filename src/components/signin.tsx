@@ -7,6 +7,7 @@ import axios from 'axios'
 //  FUNCTION IMPORTS
 import { useMainApp } from "../AppState/appstate";
 import { Button, TextInput, Container } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
 
 const Signin:FC = () => {
@@ -15,10 +16,19 @@ const Signin:FC = () => {
   // username
   // password
   // main app state
-  const [username, setUsername] = useState<string | null>("")
-  const [userpassword, setuserpassword] = useState<string | null>("")
+  // navigate hook
+  const [username, setUsername] = useState<string>("")
+  const [userpassword, setuserpassword] = useState<string>("")
   const [pincode, setPincode] = useState<number | null>(null)
-  const {mainappstate,setmainappstate} = useMainApp()
+  const {setmainappstate} = useMainApp()
+  const navigate = useNavigate()
+
+  // FORM CLEANER
+  const formcleaner = () => {
+    setuserpassword('')
+    setUsername('')
+    setPincode(null)
+  };
   
 
 
@@ -33,12 +43,11 @@ const Signin:FC = () => {
       pincode,
     }
 
+    // set main app state
     setmainappstate((prevstate) => {
       const newstate = {...prevstate, username, userpassword, pincode}
       return newstate;
     })
-
-
 
 
     // sending userprofile to database
@@ -47,9 +56,13 @@ const Signin:FC = () => {
       return res
     }).then((result) => {
       console.log(result.data.message)
+      navigate('/passwords')
     }).catch((err) => {
       console.log(err.message)
     })
+
+    // clear form
+    formcleaner();
     
   }
 
