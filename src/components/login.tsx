@@ -38,10 +38,9 @@ const Login:FC = () => {
   // HANDLE FORM INPUT
   const handleInput = (e:React.ChangeEvent<HTMLInputElement>) => {
 
-   
     if(e.target.name === 'username'){
       setUsername(e.target.value)
-    } else if (e.target.name === 'password'){
+    } else if (e.target.name === 'userpassword'){
       setuserpassword(e.target.value)
     } 
 

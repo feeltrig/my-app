@@ -1,17 +1,23 @@
-todo
+<!-- todo -->
 
-4. use bcrypt or node for hashing
+1. use bcrypt or node for hashing
+2. use jwt auth
+3. fetch passwords from backend
+4. create all context to save data on client for userprofile
+5. create mantine notifications and alerts and modals with loading
+6. add responsive ness to css
+7. try protected routes for more safety
+8. add button to sync all offline passwords to db
+9. all routes and clean up the code for backend
+
+<!-- optional -->
+
+1. use mongoose maybe
+
+<!-- completed -->
+
+1. use left pane as nav bar
+2. create login/signup modal for auth
+3. have a mongodb backend with prisma or without prisma
+4. fetch all data from backend
 5. forced login or sign up
-6. use mongoose maybe
-7. use jwt auth
-8. fetch passwords from backend
-9. create all context to save data on client for userprofile
-10. create mantine notifications and alerts and modals with loading
-11. add responsive ness to css
-
-completed
-
-5. use left pane as nav bar
-1. create login/signup modal for auth
-1. have a mongodb backend with prisma or without prisma
-1. fetch all data from backend

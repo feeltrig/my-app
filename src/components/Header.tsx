@@ -1,19 +1,30 @@
-import React from 'react'
-import { Header } from "@mantine/core";
+import React, { Dispatch, FC, SetStateAction, useState } from 'react'
+import { Box, Burger, Container,  Group, Header, MediaQuery, Title } from "@mantine/core";
 
+export type HeaderProps = {
+  setopened: Dispatch<SetStateAction<boolean>>
 
+}
 
-const HeaderComponent = () => {
+const HeaderComponent:FC<HeaderProps> = ({setopened}:HeaderProps) => {
+
+  const [burgeropen, setburgeropen] = useState<boolean>(false)
+  
   return (
-    <div>
-        <Header height="3rem">
-            Password mangr
-            
-
-        </Header>
-
+    <Header height='100%' className='headercustom'>
+      <Container   fluid>
         
-    </div>
+        <Group position='apart'>
+          <Title order={3}>Password Manager</Title>
+          <MediaQuery largerThan='xs' styles={{visibility:"hidden"}}>
+            <p>
+              <Burger  opened={burgeropen} onClick={() => {setburgeropen((prev) => { return !prev}); setopened((prev) => {return !prev}) }} / >
+            </p>
+          </MediaQuery>
+        </Group>
+        
+      </Container>    
+    </Header>
   )
 }
 

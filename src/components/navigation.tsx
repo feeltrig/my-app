@@ -1,5 +1,5 @@
-import { Box, Navbar, Text, createStyles, Stack, Button, MediaQuery } from '@mantine/core';
-import React , {FC, useEffect, useState} from 'react'
+import { Navbar , Stack, Button, MediaQuery} from '@mantine/core';
+import React , {Dispatch, FC, SetStateAction, useEffect, useState} from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import { useMainApp } from '../AppState/appstate';
 
@@ -8,7 +8,6 @@ import { appStateTYPE } from "../AppState/appstate";
 
 // DEFAULT APP STATE IMPORT
 import { appState } from "../AppState/appstate";
-
 
 const Navigation:FC = () => {
 
@@ -42,8 +41,9 @@ const Navigation:FC = () => {
 
 return (
   <MediaQuery smallerThan='md' styles={{width:"10rem"}}>
-    <Navbar  p="xs" width={{ base: 300 }}>
-      <Navbar.Section>{"passwordmanager"}</Navbar.Section>
+  <MediaQuery smallerThan='xs' styles={{display:"none"}}>
+    <Navbar className='navcustom' height='100%'  p="xs" width={{ base: 300 }}>
+      
       <Navbar.Section grow mt="md">
         {
 
@@ -52,24 +52,31 @@ return (
               Home
             </Button>
 
-            { !isLogged && <Button color='blue' size='sm'  variant="subtle" component={Link} to='login' radius="xs">
+            {/* hide buttons after log/sign in */}
+            { !isLogged && <> <Button color='blue' size='sm'  variant="subtle" component={Link} to='login' radius="xs">
               login
-            </Button>}
-            <Button color='blue' size='sm'  variant="subtle" component={Link} to='signin' radius="xs">
-      signin
             </Button>
+            <Button color='blue' size='sm'  variant="subtle" component={Link} to='signin' radius="xs">
+              signin
+            </Button></>}
+
+            {/* show buttons if logged */}
+            { isLogged && 
+            <>
             <Button color='blue' size='sm'  variant="subtle" component={Link} to='passwords' radius="xs">
               passwords
             </Button>
-            {isLogged &&
+         
                <Button color='blue' size='sm'  variant="subtle" onClick={logoutfn} radius="xs">
                Log out
              </Button>
+             </>
             }
           </Stack>
         }</Navbar.Section>
       <Navbar.Section>{/* Footer with user */}</Navbar.Section>
     </Navbar>
+  </MediaQuery>
 </MediaQuery>
 )
 }

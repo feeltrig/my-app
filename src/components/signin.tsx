@@ -20,7 +20,7 @@ const Signin:FC = () => {
   const [username, setUsername] = useState<string>("")
   const [userpassword, setuserpassword] = useState<string>("")
   const [pincode, setPincode] = useState<number | null>(null)
-  const {setmainappstate} = useMainApp()
+  const {mainappstate, setmainappstate} = useMainApp()
   const navigate = useNavigate()
 
   // FORM CLEANER
@@ -52,7 +52,7 @@ const Signin:FC = () => {
 
     // sending userprofile to database
     axios.post('http://localhost:3001/user/signin',
-    userProfile).then((res) => {
+    mainappstate).then((res) => {
       return res
     }).then((result) => {
       console.log(result.data.message)
