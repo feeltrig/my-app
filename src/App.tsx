@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
-import { AppShell, Drawer } from "@mantine/core";
+import { AppShell, Drawer, Header } from "@mantine/core";
 
 import './App.css';
 
@@ -11,14 +11,14 @@ import Navigation from './components/navigation';
 import Signin from './components/signin';
 import Login from './components/login';
 
-import Passwords from './components/passwords/passwords';
-import CreatePassword from './components/passwords/createPassword';
-import PasswordDisplay from './components/passwords/passwordDisplay';
 
 // CONTEXT IMPORTS
 import { ContextProvider } from "./AppState/appstate";
 import HeaderComponent from './components/Header';
 import Errorpage from './components/errorpage';
+import ProtectedRoutes from './components/protectedRoutes';
+import MobileNav from './components/mobileNav';
+
 
 // USESTATE HOOK TYPE
 export type openedTYPE = [
@@ -30,27 +30,23 @@ export type openedTYPE = [
 const App:FC = () => {
 
   // MAIN APP STATE
-  const [opened, setopened]:openedTYPE = useState<boolean>(true)
-
-
-  return (
-     
+  const [opened, setopened]:openedTYPE = useState<boolean>(false)
+  
+  return ( 
     <ContextProvider>
-      
-      <Drawer onClose={() => {setopened(false)}} opened={opened} title="Menu" position='left' size='full'>
-
-      </Drawer>
-
     <Router>
     <AppShell
     padding="md"
+
     
-    navbar={ <Navigation/>}
-    header={<HeaderComponent setopened={setopened} />}
+    
+    navbar={ <Navigation  opened={opened} setopened={setopened}  />}
+    header={<HeaderComponent  setopened={setopened} />}
     
     styles={(theme) => ({
-      main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[1]
-    },
+      main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[1],
+      
+    },body:{ height:'calc(100vh - 3rem)' }
     })}
   >
     <div className="App"> 
@@ -58,6 +54,7 @@ const App:FC = () => {
           <Route path="/" element={<Home/>} />
           <Route path="login" element={<Login/>} />
           <Route path="signin" element={<Signin/>} />
+          <Route path='/user/*' element={<ProtectedRoutes /> } />
          
           <Route path='*' element={<Errorpage /> } />
         </Routes>    

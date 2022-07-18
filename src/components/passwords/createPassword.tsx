@@ -26,6 +26,8 @@ const CreatePassword:FC = () => {
     setpassword('')
   };
 
+  console.log('create password')
+
    // HANDLE FORM INPUT
    const handleInput = (e:React.ChangeEvent<HTMLInputElement>) => {
    

@@ -8,8 +8,12 @@ import { appStateTYPE } from "../AppState/appstate";
 
 // DEFAULT APP STATE IMPORT
 import { appState } from "../AppState/appstate";
+import { NavigationTYPE } from '../Types/navigationTYPE';
+import MobileNav from './mobileNav';
+import NavbarComp from './NavbarComp';
 
-const Navigation:FC = () => {
+
+const Navigation:FC<NavigationTYPE> = ({opened,setopened}) => {
 
   // INITIALIZATIONS
   // main app state
@@ -18,10 +22,10 @@ const Navigation:FC = () => {
   const { mainappstate, setmainappstate } = useMainApp()
   const [isLogged, setIsLogged] = useState(false)
   const navigate = useNavigate()
+  
 
   // LOGIN CHECKER FUNCTION
   const isLoggedfn = (state:appStateTYPE):boolean => {
-    console.log(state?.username !== null)
     return state?.username !== null;    
   };
 
@@ -36,48 +40,10 @@ const Navigation:FC = () => {
   const logoutfn = () => {
     setmainappstate(appState)
     navigate('/')
-  };
-  
+  };  
 
 return (
-  <MediaQuery smallerThan='md' styles={{width:"10rem"}}>
-  <MediaQuery smallerThan='xs' styles={{display:"none"}}>
-    <Navbar className='navcustom' height='100%'  p="xs" width={{ base: 300 }}>
-      
-      <Navbar.Section grow mt="md">
-        {
-
-          <Stack spacing={5}>
-            <Button color='blue' size='sm'  variant="subtle" component={Link} to='/' radius="xs">
-              Home
-            </Button>
-
-            {/* hide buttons after log/sign in */}
-            { !isLogged && <> <Button color='blue' size='sm'  variant="subtle" component={Link} to='login' radius="xs">
-              login
-            </Button>
-            <Button color='blue' size='sm'  variant="subtle" component={Link} to='signin' radius="xs">
-              signin
-            </Button></>}
-
-            {/* show buttons if logged */}
-            { isLogged && 
-            <>
-            <Button color='blue' size='sm'  variant="subtle" component={Link} to='passwords' radius="xs">
-              passwords
-            </Button>
-         
-               <Button color='blue' size='sm'  variant="subtle" onClick={logoutfn} radius="xs">
-               Log out
-             </Button>
-             </>
-            }
-          </Stack>
-        }</Navbar.Section>
-      <Navbar.Section>{/* Footer with user */}</Navbar.Section>
-    </Navbar>
-  </MediaQuery>
-</MediaQuery>
+  <NavbarComp isLogged={isLogged}  logoutfn={logoutfn} /> 
 )
 }
 

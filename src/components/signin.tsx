@@ -83,7 +83,7 @@ const Signin:FC = () => {
 
   return (
     <>
-    <Container  >
+    <Container fluid >
       <form onSubmit={(e) => {handlesubmit(e)}} >
 
         {/* username */}

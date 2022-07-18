@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { Route, useNavigate } from 'react-router-dom'
+import React, { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import { appStateTYPE, useMainApp } from '../AppState/appstate'
+import MyAccount from '../Pages/myaccount'
+import Errorpage from './errorpage'
 import CreatePassword from './passwords/createPassword'
 import PasswordDisplay from './passwords/passwordDisplay'
 import Passwords from './passwords/passwords'
 
-type Props = {}
+export type ProtectedRINF = () => JSX.Element | null  
 
-const ProtectedRoutes = (props: Props) => {
+const ProtectedRoutes:ProtectedRINF = () => {
 
     
       // INITIALIZATIONS
@@ -20,27 +22,33 @@ const ProtectedRoutes = (props: Props) => {
 
   // LOGIN CHECKER FUNCTION
   const isLoggedfn = (state:appStateTYPE):boolean => {
-    console.log(state?.username !== null)
     return state?.username !== null;    
   };
 
   // SET ISLOGGED
-  useEffect(() => {
+  useLayoutEffect(() => {
     setIsLogged(() => {
      return isLoggedfn(mainappstate)
     })
   }, [mainappstate])
 
+  console.log(isLogged)
+
   if(isLogged){
     return (
-        <div>
+        <Routes>
              <Route path="passwords" element={<Passwords/>}>
                 <Route path='createpassword' element={<CreatePassword /> } /> 
                 <Route path='passwordDisplay' element={<PasswordDisplay />} /> 
               </Route>
-        </div>
+              <Route path='myaccount' element={<MyAccount /> } />
+        </Routes>
       )
+  } else {
+    return Errorpage();
   }
+
+  return null;
   
 }
 

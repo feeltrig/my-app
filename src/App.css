@@ -1,12 +1,24 @@
-.headercustom {
-  min-height: 4rem;
+.flex {
+  display: flex;
+  flex-grow: 1;
 }
 
-.asidecustom {
-  min-height: calc(100vh-5rem);
+.reset {
+  margin: 0;
+  padding: 0;
 }
 
-.navcustom {
-  min-height: 50rem;
-  height: 5rem;
+.border {
+  border: 2px solid;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  flex-grow: 1;
+}
+
+.navheight {
+  box-sizing: border-box;
 }

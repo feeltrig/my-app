@@ -2,9 +2,9 @@ import { Button, Center, Text } from '@mantine/core'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-type Props = {}
 
-const Errorpage = (props: Props) => {
+
+const Errorpage = () => {
   return (
     <>
     <Text align='center' >Wrong url</Text>
