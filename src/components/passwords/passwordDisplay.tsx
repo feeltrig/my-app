@@ -1,29 +1,116 @@
-import React, {FC} from 'react'
-import { useOutletContext } from 'react-router-dom';
+import { Button, Table } from "@mantine/core";
+import axios from "axios";
+import React, { FC, useState } from "react";
+import { useOutletContext } from "react-router-dom";
 
-// IMPORT INTERFACES
-import { appStateINF } from "../../interfaces/appStateINF";
+// IMPORT INTERFACES/TYPES
+import { contextTYPE } from "../../AppState/appstate";
+import { passwordDataINF } from "../../interfaces/passwordDataINF";
 
+// IMPORT FUNCTION
+import { notify } from "../../Pages/myaccount";
+import { guestINF } from "../protectedRoutes";
 
-const PasswordDisplay:FC = () => {
-
+const PasswordDisplay = ({ guestlogin }: guestINF) => {
   // INITIALIZATIONS
   // main app state
-  const mainState:appStateINF = useOutletContext();
+  // db passwords
+  // loading state
+  const { mainappstate, setmainappstate }: contextTYPE = useOutletContext();
+  const { username, userpassword, pincode, passwordData } = mainappstate;
+  const [loading, setloading] = useState(false);
 
+  console.log(mainappstate);
 
-  console.log(mainState.passwordData)
+  // SYNC PASSWORDS WITH CLOUD
+  const handlePasswordSync = () => {
+    setloading(true);
+    console.log(passwordData);
+    if (passwordData?.length > 0) {
+      // payload
+      const syncpasswordsPayload = {
+        username,
+        userpassword,
+        pincode,
+        passwordData,
+      };
+
+      console.log(syncpasswordsPayload);
+
+      // send passwords to db for sync
+      axios
+        .post("http://localhost:3001/user/syncpasswords", syncpasswordsPayload)
+        .then((res) => {
+          if (res.status < 400 && res.data.payload.length > 0) {
+            setmainappstate((prev) => {
+              const newstate = { ...prev, passwordData: res.data.payload };
+              console.log(newstate);
+              return newstate;
+            });
+            notify("Succesfully synced");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          notify(err.message);
+        });
+    } else {
+      // get all passwords
+      axios
+        .get("http://localhost:3001/user/fetchpasswords")
+        .then((res) => {
+          console.log(res.data);
+
+          if (res.status < 400 && res.data.payload.length > 0) {
+            setmainappstate((prev) => {
+              const newstate = { ...prev, passwordData: res.data.payload };
+              console.log(newstate);
+              return newstate;
+            });
+          }
+
+          setloading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          setloading(false);
+          notify(err.message);
+        });
+    }
+  };
 
   return (
-    <div className='passwordContainer' > 
-      {mainState.passwordData.map((item,index) => {
-        return(<div key={index}>
-        <p>{item.title}</p>
-        <p>{item.password}</p>
-        </div>)
-      })}
-    </div>
-  )
-}
+    <>
+      <Table
+        my={"1rem"}
+        width={"2rem"}
+        verticalSpacing={"xs"}
+        horizontalSpacing={"xs"}
+      >
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Password</th>
+          </tr>
+        </thead>
+        <tbody>
+          {passwordData?.map((item, index) => {
+            return (
+              <tr key={index}>
+                <td>{item.title}</td>
+                <td>{item.password}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table>
+      {!guestlogin && (
+        <Button my={"2rem"} loading={loading} onClick={handlePasswordSync}>
+          Sync passwords
+        </Button>
+      )}
+    </>
+  );
+};
 
 export default PasswordDisplay;

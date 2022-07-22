@@ -1,4 +1,12 @@
-import { createContext, useContext, SetStateAction, Dispatch, useState, FC,  ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  SetStateAction,
+  Dispatch,
+  useState,
+  FC,
+  ReactNode,
+} from "react";
 
 // PASSWORDDATA INTERFACE
 import { passwordDataINF } from "../interfaces/passwordDataINF";
@@ -7,7 +15,7 @@ import { passwordDataINF } from "../interfaces/passwordDataINF";
 export type appStateTYPE = {
   username: string | null;
   userpassword: string | null;
-  pincode: number | null;
+  pincode: number | string;
   passwordData: passwordDataINF[];
   authToken: string | null;
 };
@@ -16,38 +24,34 @@ export type appStateTYPE = {
 export const appState = {
   username: null,
   userpassword: null,
-  pincode: null,
+  pincode: "",
   passwordData: [],
   authToken: null,
 };
 
-
 // USESTATE HOOK TYPE
 export type contextTYPE = {
-  mainappstate:appStateTYPE,
-  setmainappstate: Dispatch<SetStateAction<appStateTYPE>>
+  mainappstate: appStateTYPE;
+  setmainappstate: Dispatch<SetStateAction<appStateTYPE>>;
 };
 
-
 // APP CREATE CONTEXT
-export const appContext = createContext<contextTYPE>({} as contextTYPE );
-
+export const appContext = createContext<contextTYPE>({} as contextTYPE);
 
 // CONTEXT PROVIDER TYPE
 type ContextProps = {
-  children: ReactNode ,
-  
-}
-
-export const ContextProvider:FC<ContextProps> = ({children}) => {
-  const [mainappstate, setmainappstate] = useState<appStateTYPE>(appState)
-
-  return <appContext.Provider value={{mainappstate,setmainappstate}} >
-    {children}
-  </appContext.Provider>
-  
+  children: ReactNode;
 };
 
+export const ContextProvider: FC<ContextProps> = ({ children }) => {
+  const [mainappstate, setmainappstate] = useState<appStateTYPE>(appState);
+
+  return (
+    <appContext.Provider value={{ mainappstate, setmainappstate }}>
+      {children}
+    </appContext.Provider>
+  );
+};
 
 // USE CONTEXT FUNCTION
 export function useMainApp() {

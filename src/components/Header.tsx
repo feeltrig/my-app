@@ -1,30 +1,54 @@
-import React, { Dispatch, FC, SetStateAction, useState } from 'react'
-import { Box, Burger, Center, Container,  CSSObject,  Grid,  Group, Header, MediaQuery, Title } from "@mantine/core";
+import React, { Dispatch, FC, SetStateAction, useState } from "react";
+import {
+  Burger,
+  createStyles,
+  Group,
+  Header,
+  MediaQuery,
+  Text,
+} from "@mantine/core";
 
 export type HeaderProps = {
-  setopened: Dispatch<SetStateAction<boolean>>
+  opened: boolean;
+  setopened: Dispatch<SetStateAction<boolean>>;
+};
 
-}
+const HeaderComponent: FC<HeaderProps> = ({
+  opened,
+  setopened,
+}: HeaderProps) => {
+  // INIT
 
-const HeaderComponent:FC<HeaderProps> = ({setopened}:HeaderProps) => {
+  // CREATE STYLE
+  const usestlyle = createStyles((theme) => ({
+    titlename: {
+      fontSize: "1rem",
+      color: theme.colorScheme == "light" ? "black" : "white",
+    },
+  }));
 
-  const [burgeropen, setburgeropen] = useState<boolean>(false)
+  const { classes } = usestlyle();
 
+  return (
+    <Header height="3rem">
+      <Group position="apart" style={{ height: "3rem" }} px="1rem">
+        <Text className={classes.titlename}>Password Manager</Text>
 
-  
-  return ( 
-        <Header height='3rem'>
-         <Group position='apart' style={{height:'3rem'}} px='1rem' >
-          <Title order={3}>Password Manager</Title>
-          <MediaQuery largerThan='xs' styles={{visibility:"hidden"}}>
-            <p className='reset'>
-              <Burger  opened={burgeropen} onClick={() => {setburgeropen((prev) => { return !prev}); setopened((prev) => {return !prev}) }} / >
-            </p>
-          </MediaQuery>
-        </Group>  
+        <MediaQuery largerThan="xs" styles={{ visibility: "hidden" }}>
+          <p className="reset">
+            <Burger
+              opened={false}
+              onClick={() => {
+                setopened((prev) => {
+                  return !prev;
+                });
+              }}
+            />
+          </p>
+        </MediaQuery>
+      </Group>
+    </Header>
+  );
+};
 
-        </Header>
-  )
-}
-
-export default HeaderComponent
+export default HeaderComponent;

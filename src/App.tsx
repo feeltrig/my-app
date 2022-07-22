@@ -1,68 +1,108 @@
-import React, { Dispatch, FC, SetStateAction, useState } from 'react';
+import React, {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
-import { AppShell, Drawer, Header } from "@mantine/core";
+import {
+  AppShell,
+  ColorScheme,
+  ColorSchemeProvider,
+  MantineProvider,
+} from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
 
-import './App.css';
+import "./App.css";
 
 // COMPONENTS IMPORTS
-import Home from "./components/home";
-import Navigation from './components/navigation';
+import Home from "./Pages/home";
+import Navigation from "./components/navigation";
 
-import Signin from './components/signin';
-import Login from './components/login';
-
+import Signin from "./components/signin";
+import Login from "./components/login";
 
 // CONTEXT IMPORTS
 import { ContextProvider } from "./AppState/appstate";
-import HeaderComponent from './components/Header';
-import Errorpage from './components/errorpage';
-import ProtectedRoutes from './components/protectedRoutes';
-import MobileNav from './components/mobileNav';
-
+import HeaderComponent from "./components/Header";
+import Errorpage from "./components/errorpage";
+import ProtectedRoutes from "./components/protectedRoutes";
+import MobileNav from "./components/mobileNav";
+import { useToggle } from "@mantine/hooks";
 
 // USESTATE HOOK TYPE
 export type openedTYPE = [
-  opened:boolean,
+  opened: boolean,
   setopened: Dispatch<SetStateAction<boolean>>
 ];
 
-
-const App:FC = () => {
-
+const App: FC = () => {
   // MAIN APP STATE
-  const [opened, setopened]:openedTYPE = useState<boolean>(false)
-  
-  return ( 
-    <ContextProvider>
-    <Router>
-    <AppShell
-    padding="md"
+  // open mobile navbar
+  // colorscheme
+  // guest user
+  const [opened, setopened]: openedTYPE = useState<boolean>(false);
+  const [colorscheme, setcolorscheme] = useState<ColorScheme>("light");
+  const toggleColorScheme = (value?: ColorScheme) => {
+    setcolorscheme(value || (colorscheme == "dark" ? "light" : "dark"));
+  };
+  const [guestlogin, setguestlogin] = useState<boolean>(false);
 
-    
-    
-    navbar={ <Navigation  opened={opened} setopened={setopened}  />}
-    header={<HeaderComponent  setopened={setopened} />}
-    
-    styles={(theme) => ({
-      main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[1],
-      
-    },body:{ height:'calc(100vh - 3rem)' }
-    })}
-  >
-    <div className="App"> 
-        <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="login" element={<Login/>} />
-          <Route path="signin" element={<Signin/>} />
-          <Route path='/user/*' element={<ProtectedRoutes /> } />
-         
-          <Route path='*' element={<Errorpage /> } />
-        </Routes>    
-    </div>
-    </AppShell>
-    </Router>  
+  useEffect(() => {
+    console.log(guestlogin);
+  }, [guestlogin]);
+
+  return (
+    <ContextProvider>
+      <Router>
+        <ColorSchemeProvider
+          colorScheme={colorscheme}
+          toggleColorScheme={toggleColorScheme}
+        >
+          <MantineProvider
+            theme={{
+              fontFamily: "Sora",
+              colorScheme: colorscheme,
+            }}
+          >
+            <NotificationsProvider position="top-center">
+              <AppShell
+                navbar={
+                  <Navigation
+                    guestlogin={guestlogin}
+                    setguestlogin={setguestlogin}
+                    opened={opened}
+                    setopened={setopened}
+                  />
+                }
+                header={
+                  <HeaderComponent opened={opened} setopened={setopened} />
+                }
+              >
+                <div className="App">
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route
+                      path="login"
+                      element={<Login setguestlogin={setguestlogin} />}
+                    />
+                    <Route path="signin" element={<Signin />} />
+                    <Route
+                      path="/user/*"
+                      element={<ProtectedRoutes guestlogin={guestlogin} />}
+                    />
+
+                    <Route path="*" element={<Errorpage />} />
+                  </Routes>
+                </div>
+              </AppShell>
+            </NotificationsProvider>
+          </MantineProvider>
+        </ColorSchemeProvider>
+      </Router>
     </ContextProvider>
   );
-}
+};
 
 export default App;
