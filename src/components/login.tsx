@@ -152,6 +152,7 @@ const Login: FC<LoginProps> = ({ setguestlogin }) => {
           <Button
             onClick={() => {
               setguestlogin(true);
+              navigate("/");
             }}
             m="1rem"
           >

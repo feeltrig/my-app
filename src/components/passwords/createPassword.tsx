@@ -4,9 +4,8 @@ import React, { useState, FormEvent, FC } from "react";
 import { useOutletContext } from "react-router-dom";
 
 // INTERFACE IMPORTS
-import { appStateTYPE } from "../../AppState/appstate";
 import { contextTYPE } from "../../AppState/appstate";
-import { createPasswordINF } from "../../interfaces/createPasswordINF";
+import { notify } from "../../Pages/myaccount";
 
 export type valueProps = string | null;
 
@@ -50,10 +49,21 @@ const CreatePassword: FC = () => {
     // save passwords in mainappstate
     setmainappstate((prev) => {
       const newpasswordData = [...prev.passwordData];
-      newpasswordData.push({ title, password });
 
-      console.log(newpasswordData);
-      return { ...prev, passwordData: newpasswordData };
+      // check if password already present
+      const result = newpasswordData.find((item) => {
+        return item.title == title;
+      });
+
+      if (result == undefined) {
+        notify("Successfully added");
+        newpasswordData.push({ title, password });
+        return { ...prev, passwordData: newpasswordData };
+      } else {
+        notify("Password already exists");
+
+        return prev;
+      }
     });
 
     // sending passwordData to database

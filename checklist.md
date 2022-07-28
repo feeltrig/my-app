@@ -1,10 +1,9 @@
 <!-- todo -->
 
-1. use bcrypt or node for hashing
 2. use jwt auth
 3. use mongoid for apis
 4. clean up file structure
-5. add guest option for offline system
+5. provide offline password cleanup and online too
 
 <!-- optional -->
 
@@ -30,3 +29,5 @@
 16. create mantine notifications and alerts and modals with loading
 17. add loaders where required
 18. add table view for display passwords/fix it
+19. use bcrypt or node for hashing
+20. add guest option for offline system

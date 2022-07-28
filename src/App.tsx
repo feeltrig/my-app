@@ -49,10 +49,6 @@ const App: FC = () => {
   };
   const [guestlogin, setguestlogin] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log(guestlogin);
-  }, [guestlogin]);
-
   return (
     <ContextProvider>
       <Router>

@@ -41,12 +41,9 @@ const ProtectedRoutes = ({ guestlogin }: guestINF): JSX.Element | null => {
   if (isLogged || guestlogin) {
     return (
       <Routes>
-        <Route path="passwords" element={<Passwords />}>
+        <Route path="passwords" element={<Passwords guestlogin={guestlogin} />}>
           <Route path="createpassword" element={<CreatePassword />} />
-          <Route
-            path="passwordDisplay"
-            element={<PasswordDisplay guestlogin={guestlogin} />}
-          />
+          <Route path="passwordDisplay" element={<PasswordDisplay />} />
         </Route>
         <Route path="myaccount" element={<MyAccount />} />
       </Routes>

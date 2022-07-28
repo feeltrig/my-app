@@ -4,8 +4,9 @@ import { Outlet, Link } from "react-router-dom";
 
 // IMPORT MAIN APP STATE
 import { contextTYPE, useMainApp } from "../../AppState/appstate";
+import { guestINF } from "../protectedRoutes";
 
-const Passwords: FC = () => {
+const Passwords = ({ guestlogin }: guestINF) => {
   // INITIALIZATIONS
   // main app state
   // button variant
@@ -34,7 +35,7 @@ const Passwords: FC = () => {
         Diplay passwords
       </Button>
 
-      <Outlet context={{ mainappstate, setmainappstate }} />
+      <Outlet context={{ mainappstate, guestlogin, setmainappstate }} />
     </Container>
   );
 };
